@@ -42,4 +42,24 @@ type Map<T> = {
 
 这里的 `& string` 是因为集合的属性可以是 `string` 、`number` 和 `symbol` 类型，所以 `key` 是这三种的联合类型，这里跟 `string` 取交集剩下的就是 `string` 类型了。交叉类型会把同一类型做合并，不同的类型则舍弃掉
 
+### 去掉索引签名
+
+索引类型可能有索引，也可能有索引签名，例如：
+
+```ts
+type Person = {
+  [key: string]: any
+  name: string
+}
+```
+
+这里的 `[key: string]: any` 即是索引签名，代表可以添加任意的 `string` 类型的索引。
+
+如果想删除索引类型的可索引签名，就要根据他的性质来操作。**索引是字符串字面量类型，而可索引签名的索引是`string`类型**，字符串变量可以使用 `infer` 提取，而 `string` 是不行的。
+
+```ts
+type RemoveIndexSignature<T extends Record<string, any>> = {
+  [Key extends keyof T as Key extends `${infer Str}` ? Str : never]: T[Key]
+}
+```
 
