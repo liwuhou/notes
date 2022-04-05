@@ -90,3 +90,6 @@ document.head.appendChild(script)
   <link ref="preload" href="example.js">
 </head>
 ```
+
+#### preload 和 prefetch 的区别
+这两个属性涉及到了预加载的概念，它能提前加载页面中需要的资源。
