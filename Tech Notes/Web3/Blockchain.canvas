@@ -1,0 +1,26 @@
+{
+	"nodes":[
+		{"id":"0e9ac2fc6671dcd7","x":-1039,"y":-382,"width":501,"height":400,"type":"file","file":"Tech Notes/Web3/Blockchain.md"},
+		{"id":"2b85f5013f7befc6","x":-300,"y":-244,"width":400,"height":209,"type":"file","file":"Tech Notes/Web3/Hash.md"},
+		{"id":"4cf9e1cc9ad6eab1","x":-300,"y":80,"width":400,"height":400,"type":"file","file":"Tech Notes/Web3/比特币中的数据结构.md"},
+		{"id":"f0232c4ef901c4d9","x":-300,"y":-721,"width":400,"height":400,"type":"file","file":"Tech Notes/Web3/区块链中的密码学原理.md"},
+		{"id":"75b2d7a16f07fc44","x":356,"y":-721,"width":400,"height":400,"type":"file","file":"Tech Notes/Web3/Proof of Work.md"},
+		{"id":"f3ff408c343e59cc","x":199,"y":-199,"width":250,"height":60,"type":"text","text":"区块链的防篡改\ntamper-evident log\n"},
+		{"id":"ef7c9108083eb6ff","x":199,"y":-95,"width":250,"height":60,"type":"text","text":"分布式存储和极难篡改和易验证          "},
+		{"id":"5fca3afb86230f95","x":955,"y":-744,"width":960,"height":440,"type":"group","label":"交易"},
+		{"id":"e05db23c5c2cfd3e","x":975,"y":-724,"width":400,"height":400,"type":"file","file":"Tech Notes/Web3/What's P2P.md"},
+		{"id":"820e4768e5a5d9b5","x":1495,"y":-724,"width":400,"height":400,"type":"file","file":"Tech Notes/Web3/Gas.md"}
+	],
+	"edges":[
+		{"id":"a7964a60579c9ea8","fromNode":"0e9ac2fc6671dcd7","fromSide":"right","toNode":"2b85f5013f7befc6","toSide":"left"},
+		{"id":"7f13fb0558d8b0c9","fromNode":"0e9ac2fc6671dcd7","fromSide":"right","toNode":"4cf9e1cc9ad6eab1","toSide":"left"},
+		{"id":"974e720dfa84a101","fromNode":"0e9ac2fc6671dcd7","fromSide":"right","toNode":"f0232c4ef901c4d9","toSide":"left"},
+		{"id":"a1b62b21ed80cf0e","fromNode":"f0232c4ef901c4d9","fromSide":"right","toNode":"75b2d7a16f07fc44","toSide":"left"},
+		{"id":"62d600e7767f8c9b","fromNode":"2b85f5013f7befc6","fromSide":"top","toNode":"f0232c4ef901c4d9","toSide":"bottom"},
+		{"id":"1576270fdf5349b0","fromNode":"2b85f5013f7befc6","fromSide":"bottom","toNode":"4cf9e1cc9ad6eab1","toSide":"top"},
+		{"id":"0b03f4f4ec75b0ae","fromNode":"75b2d7a16f07fc44","fromSide":"bottom","toNode":"f3ff408c343e59cc","toSide":"top"},
+		{"id":"6961df161f7c039d","fromNode":"4cf9e1cc9ad6eab1","fromSide":"right","toNode":"f3ff408c343e59cc","toSide":"left"},
+		{"id":"fef817cbd3fe66af","fromNode":"75b2d7a16f07fc44","fromSide":"right","toNode":"5fca3afb86230f95","toSide":"left"},
+		{"id":"92189f4f25677e0a","fromNode":"f3ff408c343e59cc","fromSide":"bottom","toNode":"ef7c9108083eb6ff","toSide":"top"}
+	]
+}

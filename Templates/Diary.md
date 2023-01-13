@@ -1,7 +1,5 @@
 ## Importants
-- [ ] 一节计算机网络课
-- [ ] 一节重学前端课
-- [ ] type 体操
+- [ ] ESLint 两三则
 - [ ] 背点英语
 
 ## Normal List
