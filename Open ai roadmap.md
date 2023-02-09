@@ -1,0 +1,7 @@
+- [x] 过一遍文档的 quick start
+- [ ] 打开 chatgpt，拿到 openai chat 的免费秘钥
+- [ ] 看一下大圣 mail-helper 的代码
+- [ ] 看一下 tg 群里其它的 ai 应用
+- [ ] 自己想一下想实现那个类型的 ai
+- [ ] 造一个 ai 应用
+- [ ] 推广，总结

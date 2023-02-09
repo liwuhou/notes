@@ -15,4 +15,5 @@ Solidity 中的[[Event]]是 EVM 上日志的抽象，它不仅响应方便还很
 
 写智能合约经常会出 bug，Solidity 中的[[Error]]命令可以帮助我们 debug。
 
-Solidity 中有两种特殊的回调函数，一种是用来[[transfer() & send() & call()#接收ETH]] 的 [[receive & fallback#接收 ETH 的函数 —— receive|receive]]，一种是用来处理合约中不存在的函数调用（代理合约 proxy contract）的[[receive & fallback#回退函数 —— fallback|fallback]]。
+Solidity 中有两种特殊的回调函数，一种是用来接收 ETH 的 [[receive & fallback#接收 ETH 的函数 —— receive|receive]]，一种是用来处理合约中不存在的函数调用（代理合约 proxy contract）的[[receive & fallback#回退函数 —— fallback|fallback]]。
+如果需要向其它合约[[transfer() & send() & call()#发送 ETH|发送 ETH]]，可以使用[[transfer() & send() & call()#transfer|transfer]]、[[transfer() & send() & call()#send|send]]和[[transfer() & send() & call()#call|call]]方法。而 [[Call]] 方法除了发送 ETH 之外，也可以实现 [[Call|调用其它合约方法]]的能力。
