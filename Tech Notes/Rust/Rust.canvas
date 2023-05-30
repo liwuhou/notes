@@ -1,0 +1,12 @@
+{
+	"nodes":[
+		{"id":"121832c30901964f","x":-780,"y":240,"width":900,"height":460,"type":"group","label":"Basic"},
+		{"type":"text","text":"Rust\n","id":"54d2ffed396b39c4","x":-176,"y":-40,"width":260,"height":60},
+		{"type":"file","file":"Tech Notes/Rust/Int.md","id":"af97db577b8104eb","x":-760,"y":280,"width":417,"height":400},
+		{"id":"07302f27af5f5cf0","x":-300,"y":280,"width":400,"height":400,"type":"file","file":"Tech Notes/Rust/Variables.md"},
+		{"id":"332482578b57dded","x":340,"y":280,"width":400,"height":416,"type":"file","file":"Tech Notes/Rust/Cargo.md"}
+	],
+	"edges":[
+		{"id":"aad024b985b44be2","fromNode":"54d2ffed396b39c4","fromSide":"bottom","toNode":"121832c30901964f","toSide":"top"}
+	]
+}
