@@ -37,7 +37,7 @@ export class AppModule implements NestModule {
 
 ![](http://cdn.liwuhou.cn/tmp/20230601081537.png)
 
-Guard 会在调用某个 Controller 之前判断权限，返回 `true` 或者 `false` 来决定是否放行。
+Guard 会在调用某个 Controller 之前判断权限（是的，Service 层用不了），返回 `true` 或者 `false` 来决定是否放行。
 声明一个路由守卫需要实现 CanActivate 接口，实现 `canActivate` 方法，可以从 `context` 拿到请求的信息，然后做一些权限验证等处理，方法返回一个 `boolean` 值。
 
 ```ts

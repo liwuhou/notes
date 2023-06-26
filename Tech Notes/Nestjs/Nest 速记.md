@@ -1,8 +1,8 @@
 Nest 在玩一种算不上很新，但在前端领域上来说很新的东西 —— IoC（Invert of Control），即控制反转。
-常规在服务器开发中，使用 MVC 等架构时， Controller 会依赖很多模块，这些模块又可能会依赖更多的其它的模块。到头来时序性和依赖可能会错综复杂，开发起来很不方便。而 Nestjs 通过利用装饰器和 TS，让 Controller 使用这些依赖变得非常无脑。
+常规在服务器开发中，使用 MVC 等架构时， Controller 会依赖很多模块，这些模块又可能会依赖更多的其它的模块。到头来时序性和依赖可能会错综复杂，开发起来很不方便。而 Nestjs 通过利用装饰器并传入`token` ，让 Controller 使用这些依赖变得非常无脑。
 
 ### Module
-
+ 
 使用 `@Injectable` 来声明（就是装饰）某个 service 类可被注入或可注入的特性，然后使用 `@Controller` 来声明和赋予其 Controller 特性，随后在 module 层声明。这些被 `@Injectable` 装饰的类称为 `Provider`
 
 ```ts
