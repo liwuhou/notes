@@ -85,3 +85,11 @@ for i in 1..5 {
   println!('{}', i);
 }
 ```
+
+也多用于字符串切片
+
+```Rust
+let s = String::from("hello world");
+
+let hello = &s[..5];
+```
