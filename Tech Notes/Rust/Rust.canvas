@@ -1,12 +1,20 @@
 {
 	"nodes":[
-		{"id":"121832c30901964f","x":-780,"y":240,"width":900,"height":460,"type":"group","label":"Basic"},
+		{"type":"group","id":"121832c30901964f","x":-780,"y":240,"width":1380,"height":960,"label":"Basic"},
+		{"id":"1337bf2df3b959a5","x":-780,"y":-580,"width":1060,"height":440,"type":"group","label":"Feature"},
 		{"type":"text","text":"Rust\n","id":"54d2ffed396b39c4","x":-176,"y":-40,"width":260,"height":60},
 		{"type":"file","file":"Tech Notes/Rust/Int.md","id":"af97db577b8104eb","x":-760,"y":280,"width":417,"height":400},
-		{"id":"07302f27af5f5cf0","x":-300,"y":280,"width":400,"height":400,"type":"file","file":"Tech Notes/Rust/Variables.md"},
-		{"id":"332482578b57dded","x":340,"y":280,"width":400,"height":416,"type":"file","file":"Tech Notes/Rust/Cargo.md"}
+		{"type":"file","file":"Tech Notes/Rust/Variables.md","id":"07302f27af5f5cf0","x":-300,"y":280,"width":400,"height":400},
+		{"id":"736d59647cbf3b86","x":-760,"y":-560,"width":400,"height":400,"type":"file","file":"Tech Notes/Rust/References & Borrowing.md"},
+		{"id":"90868eda52b31801","x":-140,"y":-560,"width":400,"height":400,"type":"file","file":"Tech Notes/Rust/Ownership.md"},
+		{"type":"file","file":"Tech Notes/Rust/Cargo.md","id":"332482578b57dded","x":460,"y":-560,"width":400,"height":416},
+		{"id":"7c5027a1bfc7ebc1","x":154,"y":280,"width":400,"height":400,"type":"file","file":"Tech Notes/Rust/String.md"},
+		{"id":"ee8be1e8cd33ee1e","x":-743,"y":740,"width":400,"height":400,"type":"file","file":"Tech Notes/Rust/Tuple.md"},
+		{"id":"bf132c380ffc707f","x":-300,"y":740,"width":400,"height":400,"type":"file","file":"Tech Notes/Rust/Struct.md"}
 	],
 	"edges":[
-		{"id":"aad024b985b44be2","fromNode":"54d2ffed396b39c4","fromSide":"bottom","toNode":"121832c30901964f","toSide":"top"}
+		{"id":"aad024b985b44be2","fromNode":"54d2ffed396b39c4","fromSide":"bottom","toNode":"121832c30901964f","toSide":"top"},
+		{"id":"bc736765e9e5c156","fromNode":"54d2ffed396b39c4","fromSide":"top","toNode":"332482578b57dded","toSide":"bottom"},
+		{"id":"8a45b3c473069f82","fromNode":"54d2ffed396b39c4","fromSide":"top","toNode":"1337bf2df3b959a5","toSide":"bottom"}
 	]
 }
