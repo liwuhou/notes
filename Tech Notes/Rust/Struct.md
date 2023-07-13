@@ -1,4 +1,4 @@
-Rust 中的 Struct 翻译为结构体，是一种灵活的复合型数据结构，在其它的编程语言中往往具有其它的名称，例如 `object`、`dict` 或 `record` 等。
+Rust 中的 Struct 翻译为结构体，是一种灵活的复合型数据结构，在其它的编程语言中往往具有其它的名称，例如 `object`、`dict` 或 `record` 等。相比[[Tuple|元组]], Struct 会更富有语义化，因为可以给每个字段一个有含义的名称。
 
 ```Rust
 struct Person {
@@ -54,6 +54,30 @@ let user = User {
 };
 ```
 
+### 结构体的可变操作
+
+在实例化一个结构体的时候，Rust 只允许我们将这个结构体声明可全部字段都可变的形式，不允许我们针对某个字段指定可变。
+
+```Rust
+struct Person {
+  name: String,
+  age: u8,
+}
+
+let mut p = Person { // 只能将整个结构体实例可变
+  name: String::from("william"),
+  age: 18,
+};
+
+p.age = 19;
+p.name = "abby";
+
+p = Person { // 也允许直接改实例指向
+  name: String::from(".."),
+  age: 1
+}
+```
+
 ### 结构体更新语法
 
 在实际的使用场景中，有一类使用情况很常见：通过已有的结构体实例来创建新的结构体实例。而 Rust 支持使用 `..` 操作符来展开已有的结构体实例，有点类型 ecmascript 的解构语法。但又有些不同的点需要注意一下。
@@ -100,3 +124,47 @@ println!("{}", user1); // 整个报错
 println!("{}", user1.username); // 报错
 
 ```
+
+### 元组结构体（Tuple Struct)
+
+结构体必须要有名称，但结构体的字段可以没有名称，这种形式的结构体看起来很像元组，因此也被称为元组结构体。
+
+```Rust
+struct Color(i32, i32, i32);
+struct Point3d(i32, i32, i32);
+
+let black = Color(0, 0, 0);
+let origin = Point3d(0, 0, 0);
+
+// 解构赋值要这样用
+let Point3d(x, y, z) = origin;
+```
+
+这样的形式既利用了元组的优势，又极大地丰富了代码的可读形式与含义。实在是一举两得。
+
+### 单元结构体（Unit-like Struct）
+
+与[[Char & Bool & Unit type#单元类型（unit type)|单元类型]]很像，单元结构体没有任何字段和属性，一般用来帮助我们定义某个不需关注其内容的类型，让我们只关心它的行为。
+
+```Rust
+struct AlwayEqual;
+
+let subject = AlwayEqual;
+
+impl SomeTrait for AlwayEqual{
+  todo!();
+}
+```
+
+### 结构体数据的所有权
+
+结构体数据也受 Rust 中的[[Ownership|所有权]]法则约束，一个结构体中，如果声明的时候，没有自身拥有所有权的数据，换句话说就是，结构体从其它地方借用了数据，那么就需要开发者显式地为这个借用的数据声明一个[[Lifetime|生命周期]]。
+
+```Rust
+struct User {
+  username: &str, // 这里的 &str 不属于 Struct 结构拥有，所以算是借用，编译会报错：这里需要一个生命周期
+  active: bool,
+}
+```
+
+### 打印结构体信息
