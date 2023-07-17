@@ -168,3 +168,37 @@ struct User {
 ```
 
 ### 打印结构体信息
+
+结构体的结构比较复杂，在 Rust 中默认没有实现它的 `Display`特征，所以直接用 `println!("{}", struct);` 会报错。
+
+而使用 `"{:?}"` 的话，又要我们实现 `Debug` 特征，这是因为 Rust 默认不会为我们实现 `Debug` 特征，如果为了实现它，就有两种方式供我们选择。
+
+一种是手动实现一个结构体的 `Debug` 特征，这种就比较复杂而且繁琐了。
+第二种就是使用 `derive` 派生，这种虽然简单，但是也有一些限制，见 [附录 D](https://course.rs/appendix/derive.html)。
+
+使用很简单，往要打印的结构体定义上加这么一些注释就可以了
+
+```Rust
+#[derive(Debug)] // 关键代码
+struct Person {
+  name: string,
+  age: number,
+}
+
+let p = Person {
+  name: "william",
+  age: 18
+};
+
+println!("{:?}", p);
+```
+
+此时就不会报任何的错误，还会正确的输出结构体。
+
+```bash
+$ cargo run
+{ name: "william", age: 18 }
+```
+
+
+
