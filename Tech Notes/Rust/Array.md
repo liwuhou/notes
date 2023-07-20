@@ -32,6 +32,26 @@ let string_array = [String::from("rust"); 5];
 let array: [String; 8] = std::array::from_fn(|_i| String::from("rust"));
 ```
 
+### 越界访问
+
+在 js 或者 ts 中，越界访问一个数组，可能只是会取到 undefined，而在 Rust 中，如果你越界访问了数组的话，就大镬咯。程序 马上 Panic 给你看。更要命的是，诸如从外部获取的某个索引值，也就是在编译时 rustc 无法知道运行代码访问的是哪个索引，也就是说只能在运行时才会发现，最终出现大问题。所以必须在这些不确定的场景增加一下检查，避免 Panic。
+
+```Rust
+use std::io; // 输入相关的包
+
+fn main() {
+  let a = [1; 5];
+
+  let mut index = String::new();
+
+  io::stdin().read_line(&mut index).expect("Faile to read line");
+
+  let index: usize = index.trim().parse().expect("Index entered was not a number!");
+
+  let element = a[index]; // 可能有越界访问的风险
+}
+```
+
 ### 数组切片
 
 同 `String` 的切片，数组也支持切片，允许我们引用集合中的部分连续片段，而不是整个集合。
