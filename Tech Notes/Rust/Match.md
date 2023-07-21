@@ -167,3 +167,39 @@ for item in arr.iter().filter(|x| matches!(x, MyEnum::Foo)) {
   // 优雅
 }
 ```
+
+### 变量的遮蔽
+
+在使用 `if let` 语法或者是 `match` 的时候，都会产生一个代码块，而在此代码块中绑定的变量都相当于新变量，如果使用了代码块之外的同名变量，那么该变量在代码块中会被[[Variables#变量的遮蔽（shadowing）|遮蔽]]
+
+```Rust
+let age = Some(30);
+println!("{:?}", age); // Some(30)
+if let Some(age) = age {
+  println!("{}", age); // 30
+}
+println!("{:?}", age); // Some(30)
+match age {
+  Some(age) => println!(age), // 30
+  _ => (),
+}
+println!("{:?}", age); // Some(30)
+```
+
+在上述代码中，`if let` 语句中，`=` 右边的 `Some(i32)` 类型的 age 被左边的 `i32` 类型的新 `age` 遮蔽了，该遮蔽会一直持续到整个 `if let` 语句块的结束。因此第三个 `println！` 输出的 `age` 依然是 `Some(i32)` 类型。
+
+在这两种语法中， 变量的遮蔽很难看出来，所以小心起见，这里可以使用不同的变量名，避免发生变量遮蔽，以至于难以理解。
+
+```Rust
+let age = Some(30);
+println!("{:?}", age); // Some(30)
+if let Some(x) = age {
+  println!("{}", x); // 30
+}
+println!("{:?}", age); // Some(30)
+match age {
+  Some(x) => println!("{}", x), // 30
+  _ => (),
+}
+println("{:?}", age); // Some(30)
+```

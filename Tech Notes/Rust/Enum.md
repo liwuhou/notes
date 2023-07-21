@@ -81,7 +81,7 @@ fn send_msg(msg: Message) {
 
 ### Option 枚举处理空值
 
-在 Rust 的标准库 `prelude` 中，包含了一个常用的枚举 —— `Option`。`Option` 包含了两个成员，一个是代表含有值的 `Some(T)`， 一个则是表示没有值的 `None`。其定义如下：
+在 Rust 的标准库 `prelude` 中，包含了一个常用的枚举 —— [[Option]]。`Option` 包含了两个成员，一个是代表含有值的 `Some(T)`， 一个则是表示没有值的 `None`。其定义如下：
 
 ```Rust
 enum Option<T> {
