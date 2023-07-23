@@ -103,6 +103,18 @@ println!("{}", this_color); // 255
 
 ### if let 匹配
 
+`if let` 语句跟 `match` 语句最不一样的就是 `if let` 语句可以只对值可能存在的某一个模式进行匹配，而不用去管其它的可能存在的值。`match` 则必须面面俱到才行，哪怕你用不上都要加上一个 `- => ()` 来避免编译器报错。这个也是因为 Rust 中 匹配模式分为可驳模式和不可驳模式的特性。像 `match` 就是不可驳模式，所以匹配必须面面俱到，而后面介绍的 `if let` 和 `while let` 就属于不可驳模式。
+
+```Rust
+if let 模式1 = target {
+  语句 or 表达式
+} else if let 模式2 = target {
+  语句 or 表达式
+} else {
+  语句 or 表达式
+}
+```
+
 当你想用 `match` 来处理某一个模式，而忽略其它模式的场景时，如果只用 `match` 写是这样的
 
 ```Rust
@@ -126,6 +138,62 @@ if let Some(1u8) = v {
 ```
 
 这样就完事了，当你想只匹配一个条件且其它条件忽略的时候，就可以用 `if let`，否则都用 `match`。
+同时，`if let` 也可以接 `else` 、 `else if let`。
+
+```Rust
+enum Foo {
+  Bar,
+  Baz,
+  Baba,
+}
+
+let v = Foo::Bar;
+if let Foo::Baz = v {
+  println!("Baz");
+} else if let Foo::Baba = v {
+  println!("Baba");
+} else {
+  println!("Bar");
+}
+
+// 其实就等价于 match 中
+match v {
+  Foo::Baz => {
+    println!("Baz");
+  },
+  Foo::Baba => {
+    println!("Baba");
+  },
+  _ => println!("Bar");
+}
+```
+
+### while let 条件循环
+
+与 `if let` 类似，`while let` 只要模式匹配上，就可以继续进行 `while` 循环。
+
+```Rust
+let mut stack = Vec::new();
+
+stack.push(1);
+stack.push(2);
+stack.push(3);
+
+while let Some(top) = stack.pop() {
+  println!("{}", top);
+}
+
+// 等价
+loop {
+  if let Some(top) = stack.pop() {
+    println!("{}", top);
+  } else {
+    break;
+  }
+}
+```
+
+上述代码，会在 `stack.pop` 方法返回的元素非空的时候，会执行 `while` 语句中的方法。这就是 `while let` 的特性，我们也可以通过 [[Control Flow#loop 循环|loop]] + [[#if let 匹配|if let]]或者[[#match匹配|match]] 来实现这个功能，就是会更加啰嗦就是了。
 
 ### matches! 宏
 
@@ -203,3 +271,43 @@ match age {
 }
 println("{:?}", age); // Some(30)
 ```
+
+### 单分支多模式
+
+在 `match` 中，使用 `|` 语句可以匹配多个模式，它代表着逻辑 `或`。
+
+```Rust
+let x = 1;
+match x {
+  1 | 2 => println!("1 | 2"),
+  3 => println!("3"),
+  _ => println!("other"),
+}
+```
+
+### 通过序列匹配值的范围
+
+如果有两个或者几个的值还好，如果是有很多值，或者是一个序列范围的值，用 `..=` 匹配值的范围就很方便
+
+```Rust
+let x: u32 = 102;
+match x {
+  1..=99 => println("一百以内"),
+  100..=200 => println("两百以内"),
+  _ => println!("很大就是了"),
+}
+```
+
+需要注意的是，`match` 的序列匹配只允许数字或是字符，因为要确保它们是连续的。而且只能用 `..=` 划分的闭区间，不能使用 `..` 这种半开区间。
+
+```Rust
+let x = 'c';
+
+match x {
+  'a'..='j' => println!("early ASCII letter"),
+  'k'..='z' => println!("late ACSII letter"),
+  _ => println!("something else"),
+}
+```
+
+同时编译器在编译期可以检查该序列是否为空，数字值和字符是 Rust 中仅有的可以用于判断是否为空的类型。

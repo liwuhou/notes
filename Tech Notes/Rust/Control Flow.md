@@ -203,7 +203,6 @@ while n <= 5 {
   n += 1;
 }
 
-### loop 循环
 ```
 
 #### while 循环与 for 循环的对比
@@ -217,6 +216,12 @@ while n <= 5 {
 `loop` 循环就像 `while(true)` 循环，一定要注意代码结束的条件，否则会无限循环下去，跑满你整个 cpu 核心。
 
 另外有意思的是，`loop` 循环是一个表达式，可以返回一个值，因此能用于赋值。
+
+```Rust
+loop {
+  // expression or statement
+}
+```
 
 ### switch 语句？
 
