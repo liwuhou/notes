@@ -13,6 +13,18 @@ match target {
 }
 ```
 
+### 何为模式
+
+模式是 Rust 中的特殊语法之一，除了与 `match` 表达式联用外，还有其它一些语法也运用了模式的匹配能力。
+像 `let` 语句。
+
+```Rust
+let (x, y) = (1, 2);
+```
+
+这其中的 `(x, y)` 就是模式匹配，连自信又普通的 `let x = 1;` 中的 `x` 也是模式。
+函数参数就自不必说了 `fn foo(x: i32) -> i32 {}`。
+
 ### match 匹配
 
 话不多说，先看个例子：
@@ -311,3 +323,137 @@ match x {
 ```
 
 同时编译器在编译期可以检查该序列是否为空，数字值和字符是 Rust 中仅有的可以用于判断是否为空的类型。
+
+### 匹配守卫
+
+上面的例子中，代码的表现力已经很强了，能让 `x` 在某个连续的区间中，但是如果是负数或者浮点数的比较就无能为力了。或者有更为复杂的判断条件又该怎么办呢。
+这里就要介绍匹配守卫了。首先看看，它长这个样子， `模式 if condition => expression`。当模式匹配上的时候，再经过一个额外的 `if` 语句判断是否满足条件，如果满足就执行语句。说白了就是为模式提供了更进一步的判断。而且在 `if` 语句中，还可以使用模式中创建的变量，举个粟子。
+
+```Rust
+let num = Some(4);
+
+match num {
+  Some(x) if x < 5 => println!("less than 5: {}", x),
+  Some(x) => pringln!("{}", x),
+  None => (),
+}
+```
+
+匹配守卫也可以使用外部的变量，或者通过一个返回 `bool` 类型的函数来判断。
+
+```Rust
+fn main() {
+  let num = Some(4);
+  let bo = true
+  match num {
+    Some(x) if less_than_five(x) => println!("less than 5"),
+    Some(_x) if bo => println!("greater than 5"),
+    _ => (),
+  }
+}
+
+fn less_than_five(x: i32) -> bool {
+  x < 5
+}
+```
+
+### 解构嵌套的结构体或枚举
+
+`match` 语法也可以嵌套，而且，`match` 的模式也支持匹配嵌套的项。
+
+```Rust
+fn main() {
+  enum Color {
+    Rgb(i32, i32, i32),
+    Hsv(i32, i32, i32),
+  }
+  enum Message {
+    ChangeColor(Color),
+  }
+
+  let message = Message::ChangeColor(Color::Rgb(0, 0, 0));
+
+  match message {
+    Message::ChangeColor(color) => match color {
+      Color::Rgb(r, g, b) => println!("Rgb({}, {}, {})", r, g, b),
+      Color::Hsv(h, s, v) => println!("Hsv({}, {}, {})", h, s, v),
+    },
+    _ => (),
+  }
+
+  // 也可以直接匹配嵌套的项
+  match message {
+    Message::ChangeColor(Color::Rgb(r, g, b)) => println!("Rgb({}, {}, {})", r, g, b),
+    Message::ChangeColor(Color::Hsv(h, s, v)) => println!("Hsv({}, {}, {})", h, s, v),
+  }
+}
+
+```
+
+### `_` 忽略模式中的值
+
+有个有意思的地方值得注意，在模式匹配中，可以使用 `_变量名` 的模式忽略某些未被使用的变量。此时 `_变量名` 仍会将值绑定到变量，但如果直接使用 `_` 当变量名的话，则值完全不会绑定。我们看下下面的例子就知道了。
+
+```Rust
+let s = Some(String::from("Hello")); // Some 中的值是一个 String
+
+if let Some(_s) = s {
+  todo!();
+}
+
+println!("{:?}", s); // 这里会报错，显示 s 已被移动了，再使用就报错
+```
+
+而如果是 `_` 的话，就完全不会有问题
+
+```Rust
+let s = Some(String::from("Hello"));
+
+if let Some(_) = s {
+  todo!();
+}
+
+println!("{:?", s); // 完全正常
+```
+
+### 用 `..` 忽略剩余值
+
+```Rust
+struct Point {
+  x: i32,
+  y: i32,
+  z: i32,
+}
+
+let origin = Point { x: 0, y: 0, z: 0 };
+
+// 使用 `..` 忽略剩余值
+match origin {
+  Point {x, .. } => pringln!("{}", x),
+}
+
+// 也可以用来忽略中间的某些值
+
+if let Point {x, .., z} = origin {
+  println!("{}, {}", x, z);
+}
+
+// 与 `_` 相同，但 `..` 能忽略一序列的值
+if let Point {x, _, z} = origin {
+  println!("{}, {}", x, z);
+}
+```
+
+但 `..` 必须是无歧义的，如果期望匹配和忽略的值不明确，Rust 就会报错。
+
+```Rust
+fn main() {
+  let numbers = (2, 4, 8, 16, 32);
+
+  match numbers {
+    (.., second, ..) => { // 报错
+      println!("Some numbers: {}", second)
+    },
+  }
+}
+```
