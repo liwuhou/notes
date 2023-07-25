@@ -457,3 +457,81 @@ fn main() {
   }
 }
 ```
+
+### `@` 绑定
+
+`@` 运算符允许为一个字段绑定另一个变量。常用在模式中，为结构体等数据类型，在匹配模式的时候，能一边约束值的范围，还能使用匹配到的字段值。举个浅显的例子。
+
+```Rust
+enum Message {
+    Hello { id: i32 },
+}
+
+fn main() {
+  let msg = Message::Hello { id: 15 };
+  let m = (5, 2);
+
+  match msg {
+    Message::Hello { id: 3..=7 } => {
+      // 这里 id 这个字段值用来匹配 3..=7了，并没有声明变量 `id`
+      println!("Found an id in another range");
+    },
+    Message::Hello { id: id @ 10..=12 } => {
+      // 使用 `@` 操作符即可将匹配到模式的字段值绑定在变量 `id` 上
+      println!("{}", id);
+    },
+    Message::Hello { id } => match id { // 不想使用 `@` 操作符的，就要啰嗦一点，多嵌套一层 Match
+      13..=15 => println!("kwkw, {}", id),
+      _ => println!("Found some other id: {}", id),
+    },
+  }
+
+  match m {
+    // 元组中也是同样道理
+    (x @ 1..=5, ..) => print!("{}", x),
+    _ => (),
+  }
+}
+
+```
+
+如上面的例子，如果又想要使用分支的变量，又想要限定分支范围，那就可以使用 `@` 来绑定到一个新的变量上。
+
+### `@` 前绑定后解构（Rust 1.56 新增）
+
+使用 `@` 可以在绑定新变量的同时，对目标进行解构：
+
+```Rust
+#[derive(Debug)]
+struct Point {
+  x: i32,
+  y: i32,
+}
+
+fn main() {
+  // 绑定新变量 `p`，同时对 `Point` 进行解构
+  let p @ Point {x: px, y: py } = Point {x: 10, y: 23};
+  println!("x: {}, y: {}", px, py);
+  println!("{:?}", p);
+
+  let point = Point {x: 10, y: 5};
+  if let p @ Point {x: 10, y} = point {
+    println!("x is 10 and y is {} in {:?}", y, p);
+  } else {
+    println!("x was not 10 :(");
+  }
+}
+```
+
+### `@` 一个要注意的点
+
+在模式匹配中，如果又使用了 `@` 绑定变量，又匹配了带有 `|` 逻辑的模式就可能会出错。
+
+```Rust
+match 1 {
+  num @ 1 | 2 => println!("{}", num),
+  _ => (),
+}
+```
+
+上述这段 `num @ 1 | 2` 的模式代码就会出错，因为 `num` 并没有绑定到所有的模式上，而是只绑定了模式 `1`，可以使用 `num @ (1 | 2)` 来解决，但有个地方需要注意，在 Rust 1.53 之前的版本，这种写法是会报错的，因为编译器不支持。

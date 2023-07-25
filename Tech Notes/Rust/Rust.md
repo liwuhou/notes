@@ -16,7 +16,11 @@
 [[Struct]]
 [[Enum]]
 [[Array]]
+[[Option]]
 
 流程控制
 
 [[Control Flow]]
+
+模式匹配
+[[Match]]
