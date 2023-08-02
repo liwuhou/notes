@@ -78,3 +78,77 @@ pub fn notify_owner(pet: &impl Pet) {
 ```Rust
 pub fn notify_owner<T: Pet>(pet: &T) {}
 ```
+
+语法糖能快速地帮我们声明一个类型泛型，然后与参数绑定。它看着更简洁，一些简单的场景下非常的适用。例如一个参数的情况下，如果有两个参数，并且这两个参数不是同一个类型，也能用 `&impl` 语法糖声明。例如：
+
+```Rust
+let cat = Cat { name: "BigHead" };
+let dog = Dog { name: "Anz" };
+
+// cat 和 dog 是两个不同的类型（Cat 结构体和 Dog 结构体），但都实现了相同的特征 Pet
+
+fn notify(pet1: &impl Pet, pet2: &impl Pet) {
+  println!("{}, {}", pet1.break_down_your_furniture("home"), pet2.break_down_your_furniture("home"));
+}
+// &impl Trait 语法糖的 notify 的函数签名实际等价于
+// fn notify<T: Pet, U: Pet>(pet1: &T, pet2: &T)
+
+notify(&cat, &dog);
+```
+
+可以看到 `&impl` 的语法糖真正的样子，也由此，他只能用在不同类型但都实现了相同特征的参数的情况。如果两个参数都是同一个类型，就不能用这个语法糖了，而是要拆出来，还原本来的样子，用相同的泛型参数去限制。
+
+```Rust
+let big_cat = Cat { name: "BigHead" };
+let small_cat = Cat { name: "SmallCat" };
+
+fn notify<T: Pet>(pet1: &T, pet2: &T) {
+  todo!();
+}
+
+notify(&big_cat, &small_cat);
+```
+
+`fn notify<T: Pet>(pet1: &T, pet2: &T)` 说明 `pet1` 和 `pet2` 都是相同的类型（`Cat` 结构体），同时 `<T: Pet>` 又约束了类型必须实现了特征 `Pet`。
+
+### 多重特征约束
+
+我们类型可以实现不止一个的特征，比如狗不仅有宠物 `Pet` 的特征，还有一些同时能胜任搜救犬和导盲犬等工作犬 `Assisant`。同样的函数也可以限制同时实现两个以上特征的类型参数。
+
+```Rust
+struct Dog {} // 狗狗结构体
+
+impl Pet for Dog {} // 为狗狗实现特征宠物
+
+impl Assisant for Dog {} // 工作犬
+
+// 语法糖
+fn some_fn1(dog: &(impl Pet + Assisant)) {todo!()}
+
+// 原本的写法
+fn some_fn2<T: Pet + Assisant>(dog: &T) {todo!()}
+```
+
+没错，是 `&(impl Trait1 + Trait2)`， 而不是 ~~`&impl(Trait1 + Trait2)`~~ 喔。
+
+### Where 约束
+
+也是一个肥肠之好用的声明特征的语法，像上面多重特征约束的例子，虽然参数还不算多，特征约束的个数也不算多，所以函数签名还在一个能够接受的范围。但如果函数签名很复杂，那么 Rust 提供了一种在形式上看起来很简洁的写法来约束函数的签名。
+
+比如我们有这么一个函数：
+
+```Rust
+pub fn some_fn<T: Pet + Assisant + Display, U: Display + Debug>(pet: &T, u: &U) -> i32 {}
+
+// 用上语法糖后
+pub fn some_fn(pet: &(impl Pet + Assisant + Display), u: &(impl Display + Debug)) -> i32 {}
+```
+
+那么可以使用 `where` 关键字改进一下写法，注意，上下两种写法在函数签名上的作用是完全等价的：
+
+```Rust
+pub fn some_fn<T, U>(pet: &T, u: &U) -> i32
+  where T: Pet + Assisant + Display,
+        U: Display + Debug
+{}
+```
