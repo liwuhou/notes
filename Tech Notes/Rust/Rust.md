@@ -17,10 +17,19 @@
 [[Enum]]
 [[Array]]
 [[Option]]
+[[Vector]]
 
 流程控制
 
 [[Control Flow]]
 
 模式匹配
+
 [[Match]]
+
+特征 & 泛型
+
+[[Generics]]
+[[Method]]
+[[Trait]]
+[[Deepin Trait]]

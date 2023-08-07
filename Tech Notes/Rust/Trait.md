@@ -6,6 +6,8 @@ fn add<T: std::ops::Add<Output = T>>(a: T, b: T) -> T {
 }
 ```
 
+> `Output` 用来定义两个变量相加之后返回的数据类型
+
 这其实也点明了特征的作用 —— 特征定义了一组可以被共享的行为，只要实体实现了特征，就能使用特征定义的行为。
 
 ### 定义特征
@@ -246,7 +248,7 @@ pub fn get_me_a_pet(name: &str) -> impl Pet {
 
 ```Rust
 pub fn get_me_a_pet(name: &str) -> impl Pet {
-  if name == 'Anz' {
+  if name == "Anz" {
     Dog {
       name: name.to_string(),
     }
