@@ -46,3 +46,16 @@ println!("{}", v.capacity()); // 4
 ```Rust
 let v = vec![1, 2, 3]; // v 推导为 Vec<i32> 类型
 ```
+
+### 更新 Vec
+
+可以使用 `push` 方法，追加元素
+
+```Rust
+let mut v = Vec::new();
+v.push(1);
+```
+
+需要注意的是，这里声明的变量须为[[Variables#变量的可变性|可变类型（mutable）]]
+
+### 从 Vec 中获取元素
