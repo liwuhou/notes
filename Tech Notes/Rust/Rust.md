@@ -4,6 +4,7 @@
 [[Int]]
 [[Char & Bool & Unit type]]
 [[Statements & Expressions]]
+[[Stack & Heap]]
 
 所有权和借用
 [[Ownership]]
@@ -16,9 +17,12 @@
 [[Struct]]
 [[Enum]]
 [[Array]]
-[[Option]]
 [[Vector]]
 [[Box]]
+[[HashMap]]
+
+其它类型
+[[Option]]
 
 流程控制
 
@@ -34,3 +38,6 @@
 [[Method]]
 [[Trait]]
 [[Deepin Trait]]
+
+生命周期
+[[Lifetime]]
