@@ -151,3 +151,107 @@ fn read_text_from_file() -> Result<String, std::io::Error> {
 ```
 
 连这都想到了，Rust 真的，我哭死。
+
+### ? 用于 Option 的返回
+
+`?` 不仅可以用来处理 `Result` 类型，也可以用来处理 `Option` 类型。与处理 `Result` 时相似，在 `?` 中，如果遇到了 `None`，那么就会直接返回 `None`。
+
+举个 🌰，读取某段字符串中第一行的最后一个字符，这时就是一个 `Option` 类型的值，我们不使用 `?` 的话，就要这么啰嗦：
+
+```Rust
+fn last_char_of_first_line(text: &str) -> Option<char> {
+  let mut line = text.lines();
+
+  match line.next() { // 因为这里的 next 可能返回的是 Option::None
+    Some(s) => s.chars().last(), // 返回这一行最后一个字符
+    None => None, // 没有就返回 null
+  }
+}
+```
+
+有点啰嗦是吧，关键是咱们调用这个 `last_char_of_first_line` 的地方，还要包一层 `match` 或者 `if let` 来处理函数返回的 `Option` 值。
+
+```Rust
+fn main() {
+  let text = "Hello\nworld";
+  match last_char_of_first_line(text) {
+    Some(c) => println!("{}", c),
+    None => println!("Nothing"),
+  }
+}
+```
+
+这里观察 `last_char_of_first_line` 方法，能够发现我们在 `match` 中，碰到 `Option::None` 的时候，就跟上面在 `match` 中碰到 `Result::Err` 一样，是直接返回它自身的，也没有做任何的处理，然后在外层中处理它。所以这里完全可以使用 `?` 来搞定这个场景。
+
+改写一下:
+
+```Rust
+let last_char_of_first_line(text: &str) -> Option<char> {
+  text.lines().next()?.chars().last()
+}
+
+fn main() {
+  let text = "Hello\nworld";
+  if let Some(c) = last_char_of_first_line(text) {
+    // 使用 if let，只处理 Option::Some 的情况，Option::None 直视
+    println!("{}", c);
+  }
+}
+```
+
+由上面的例子中也可以很容易的得出规律：
+
+1. `?` 适用的场景是某个函数中，函数返回类型是 `Result<_,_>` 或是 `Option<_>` 的场景
+2. `?` 只是一个使用 `match` 处理 `Result` 和 `Option` 类型，并且使用 `return` 来提前返回的语法糖
+3. `?` 会自动调用 `Error` 类型的 `from` 方法，能自动转换为更大的错误类型
+4. 在 `Result` 或 `Option` 的值后跟上 `?`，表示如果值是正面的，也就是 `Result::Ok` 或 `Option::Some` 就忽略 `?`，接着执行
+5. `?` 处理 `Result::Ok(T)` 或 `Option::Some(T)`，如果是值是正面的，那该语句返回的是解套了的 `T` 类型
+6. 如果值返回的是负面的，也就是 `Result::Err` 或 `Option::None` 的时候，就直接中断，提前返回相应的 `Err` 或 `None`
+
+规律 5 挺重要的，这也是很多使用 `?` 的新手司机容易混淆的点，首先因为有提前 `return` 所以要在函数里使用。并且还要保证受函数的返回类型约束。先看一下下面的例子：
+
+```Rust
+fn get_option() -> Option<i32> {
+  let x = Some(1);
+  let y = x?;
+  Some(y) // ? 的值一定要有变量对象来接收，并且如果其是 Some<T> 类型，会直接把 T 赋给 y
+  // 下面这样为啥报错了？想想规律 5
+  // x?
+}
+```
+
+基于以上规律，如果要在 `main` 方法中使用 `?`，那就要适当地改造 `main` 方法的返回类型，一般都是使用 `Result<(), Box<dyn std::error::Error>` 来接收，并且在函数的最后，返回一个 `Ok(())`。例如：
+
+```Rust
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+  let f = std::fs::File::open("xxx.txt")?;
+  // 操作 f
+
+  Ok(()) //  最后返回一个 `Ok(())`
+}
+```
+
+顺便提一嘴，`Box<dyn Trait>` 这种[[Deepin Trait#特征对象的定义|特征对象]]的用法，是一种很常用的，用来抽象一类实现了共同特征的类型的方法。
+
+### try!
+
+在 `?` 语法面世之前，Rust 有个宏方法也是用来实现提前返回错误的，它就是末路英雄 `try!`。直接看他的源码定义可以发现，就是个方法用来处理 `Result` 类型，`Ok` 直接返回值，`Err` 就提前 `return` 出错误：
+
+```Rust
+marco_rules! try {
+  ($e:expr) => (match $e {
+    Ok(Val) => Val,
+    Err(err) => return Err(::std::convert::From::from(err)),
+  })
+}
+```
+
+跟 `?` 对比一下：
+
+```Rust
+let x = File::open("xxx.txt")?;
+
+let x = try!(File::open("xxx.txt"));
+```
+
+劣势也是很明显的，不能使用链式调用，也不能用来处理 `Option` 类型的值，并且，在现在版本的 Rust 中使用 `try!`，IDE 上直接就标红，编译能通过，但也会报一个 `warning` 提示你使用 `?` 来代替 `try!`，只能说在后面的开发中，要尽量避免使用 `try!`，因为它尽早要淘汰了。
