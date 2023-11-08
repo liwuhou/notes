@@ -195,10 +195,10 @@ if map.contains_key("green") {
 
 ```Rust
 // 承接上面代码片段
-map.entry("yellow").insert_or(1);
+map.entry("yellow").or_insert(1);
 println!("{}", map["yellow"]); // 1
 
-map.entry("yellow").insert_or(100000);
+map.entry("yellow").or_insert(100000);
 println!("{}", map.["yellow"]); // 还是 1
 ```
 

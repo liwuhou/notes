@@ -11,7 +11,6 @@
 [[References & Borrowing]]
 
 复合类型
-
 [[String]]
 [[Tuple]]
 [[Struct]]
@@ -26,15 +25,12 @@
 [[Result]]
 
 流程控制
-
 [[Control Flow]]
 
 模式匹配
-
 [[Match]]
 
 特征 & 泛型
-
 [[Generics]]
 [[Method]]
 [[Trait]]
