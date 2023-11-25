@@ -81,11 +81,12 @@ Circle.prototype.area = function () {
 }
 ```
 
-### self, &self, &mut self
+### self, mut self, &self, &mut self
 
 在对象的方法中操作对象自身，由于方法的本质还是函数，故方法参数仍受所有权法则约束。下面是几种 `self` 的引用：
 
 - `self`：其实是 `self: Self` 的简写，表示将对象的所有权转移到该方法中，这种形式只能说有，但是用得很少
+- `mut self`: `self: mut Self` 同 `self`，只不过这个允许对 `Self` 做 更改
 - `&self`： 其实是 `self: &Self` 的简写，表示对对象的[[References & Borrowing#不可变引用|不可变引用]]
 - `&mut self`：没错，其实也是 `self: &mut Self` 的简写，表示[[References & Borrowing#可变借用|可变借用]]
 

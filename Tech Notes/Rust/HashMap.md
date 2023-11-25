@@ -21,7 +21,7 @@ fn main() {
 
 与 [[Vector#Vec::with_capacity|Vector]] 一样，如果预先知道要存储的键值对个数，可以使用 `HashMap::with_capacity` 创建预先分配了足够多内存空间的 HashMap，避免后续大量插入导致频繁的内在分配和拷贝，以提升性能。
 
-#### 使用迭代器和 colloect 方法转换为 HashMap
+#### 使用迭代器和 collect 方法转换为 HashMap
 
 迭代器中提供了一个 `collect` 方法，可以把某些类型转为集合类型，这其中也存在把 `Vec<(T, U)>` 转为 `HashMap<T, U>` 的操作。
 
@@ -211,4 +211,13 @@ assert_eq!(black_count, 0);
 *black_count += 1;
 assert_eq!(*black_count, 1);
 
+```
+
+由于 `or_insert` 方法返回的是值的可变引用，所以要注意不能同时操作两个可变引用。
+
+```Rust
+let black_count = map.entry("black").or_insert(0);
+let white_count = map.entry("white").or_insert(0);
+
+*black_count += 1; // map 的可变引用已经改为了 white_count 处，同一时刻只能有一个可变引用
 ```
