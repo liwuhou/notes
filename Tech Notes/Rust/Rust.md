@@ -10,6 +10,9 @@
 [[Ownership]]
 [[References & Borrowing]]
 
+智能指针
+[[Smart Pointers]]
+
 复合类型
 [[String]]
 [[Tuple]]
@@ -36,8 +39,11 @@
 [[Trait]]
 [[Deepin Trait]]
 
-生命周期
+生命周期 & 全局变量
 [[Lifetime]]
+[[Global Variable]]
+
+无畏并发
 
 错误处理
 [[Panic]]
