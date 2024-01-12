@@ -265,3 +265,19 @@ pub fn get_me_a_pet(name: &str) -> impl Pet {
 ### 为自定义类型实现 + 操作
 
 在 Rust 中除了数值可以进行加法操作，`String` 也可以，自然是 Rust 为该类型实现了 `std::ops::Add` 特征。同样的，如果我们想为自定义类型加上加法操作，那么只要实现该特征就可以了。
+
+### Clone Trait 与 Copy Trait
+
+Clone Trait 上有两个方法，`clone` 和 `clone_from` 方法，一般只实现 `clone` 方法即可，因为 `clone_from` 有默认实现。
+
+```Rust
+pub trait Clone {
+  fn clone(&self) -> Self
+
+  fn clone_from(&mut self, source: &self) {
+    *self = source.clone();
+  }
+}
+```
+
+`clone` 与 `clone_from` 的差异在于，
